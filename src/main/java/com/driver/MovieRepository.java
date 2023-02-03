@@ -47,8 +47,14 @@ public class MovieRepository {
         return directordb.get(directorname);
      }
 
-     public List  getMoviesByDirectorName (String directorname){
-       return List.of(pairdb.get(directorname));
+     public List  getMoviesByDirectorName (String directorname) {
+//       return List.of(pairdb.get(directorname));
+         List<String> movieList = new ArrayList<>();
+         if (pairdb.containsKey(directorname)) {
+             movieList = pairdb.get(directorname);
+
+         }
+         return movieList;
      }
      public List findAllMovies(){
         List<String>allmovies=new ArrayList<>();
@@ -58,16 +64,19 @@ public class MovieRepository {
         return allmovies;
      }
      public String deleteDirectorByName(String directorname){
-       if(!pairdb.containsKey(directorname)){
+       if(!directordb.containsKey(directorname)){
            return"Invalid Request";
        }
-        List<String>list=pairdb.get(directorname);
-        for(String movie:moviedb.keySet()){
-            if(list.contains(movie)){
-                moviedb.remove(movie);
-            }
-        }
-        pairdb.remove(directorname);
+       if(pairdb.containsKey(directorname)) {
+           List<String> list = pairdb.get(directorname);
+           for (String movie : list) {
+               if (moviedb.containsKey(movie)) {
+                   moviedb.remove(movie);
+               }
+           }
+           pairdb.remove(directorname);
+       }
+
         directordb.remove(directorname);
         return"Director removed successfully";
      }
